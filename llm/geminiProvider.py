@@ -8,7 +8,7 @@ from llm.provider import LLMProvider
 class GeminiProvider(LLMProvider):
     def __init__(self, modelName: str = 'gemini-2.5-pro'):
         self._modelName = modelName
-        self._apiKey = os.environ['GEMINI_API_KEY']
+        self._apiKey = os.getenv('GEMINI_API_KEY')
 
         if not self._apiKey:
             raise Exception('GEMINI_API_KEY not set')

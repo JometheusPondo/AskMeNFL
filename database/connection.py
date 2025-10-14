@@ -1,9 +1,8 @@
 import sqlite3
 import pandas as pd
 
-from llm.provider import LLMProvider
 import logging
-import requests
+
 
 logger = logging.getLogger(__name__)
 
@@ -66,11 +65,3 @@ class DatabaseConnection:
             raise ValueError(f"Query execute failed: {e}")
 
 
-class QueryProcessor(DatabaseConnection):
-    def __init__(self, db_path: str, llm_provider: LLMProvider):
-        super().__init__(db_path)
-        self._llm_provider = llm_provider
-
-    def processInput(self, query: str):
-        sql = self._llm_provider.generateSQL(query)
-        return self.executeQuery(sql)
