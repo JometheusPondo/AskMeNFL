@@ -46,8 +46,9 @@ class QueryProcessor(DatabaseConnection):
 
         sqlUpper = sql.upper().strip()
 
-        if not sqlUpper.startswith("SELECT"):
+        if not (sqlUpper.startswith("SELECT") or sqlUpper.startswith("WITH")):
             logger.error("SQL query is invalid")
+            logger.error(f"Raw LLM response was: {sql[:500]}...")
             return False
 
         riskKeywords = ['DROP', 'DELETE', 'INSERT', 'UPDATE', 'ALTER', 'CREATE', 'TRUNCATE', 'EXEC']
@@ -81,10 +82,12 @@ class QueryProcessor(DatabaseConnection):
 
             if not sqlQuery:
                 logger.error(f"Service could not extract SQL query")
+                logger.error(f"Raw LLM response was: {llmResponse[:500]}...")
                 self._failedQueries += 1
                 return {
                     'success': False,
-                    'error': "Service could not extract SQL query"
+                    'error': "Service could not extract SQL query",
+                    'rawResponse': llmResponse if includeSQL else None
                 }
 
             if not self._validateSQL(sqlQuery):

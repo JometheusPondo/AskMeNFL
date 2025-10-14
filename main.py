@@ -19,9 +19,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-# ==============================================================================
+# ===========================
 # Pydantic Models (API Layer)
-# ==============================================================================
+# ===========================
 
 class QueryRequest(BaseModel):
     # Request model for query endpoint
@@ -64,7 +64,7 @@ async def lifespan(app: FastAPI):
     global queryProcessor, geminiProvider
 
     # Startup: Initialize provider and processor
-    logger.info("🚀 Initializing NFL Query System with OOP architecture...")
+    logger.info("🚀 Initializing Ask me NFL...")
 
     try:
         geminiProvider = GeminiProvider(modelName='gemini-2.5-pro')
@@ -77,9 +77,12 @@ async def lifespan(app: FastAPI):
 
         queryProcessor.connect()
 
+        schema = queryProcessor.getFullSchema()
+        geminiProvider._databaseSchema = schema
+
         logger.info(f"✓ Database connected: {queryProcessor.isConnected}")
         logger.info(f"✓ Total plays loaded: {queryProcessor.totalPlays:,}")
-        logger.info("✓ NFL Query System ready!")
+        logger.info("✓ Ask me NFL ready!")
 
     except Exception as e:
         logger.error(f"Failed to initialize system: {e}")
@@ -87,7 +90,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
-    logger.info("Shutting down NFL Query System...")
+    logger.info("Shutting down Ask me NFL...")
     if queryProcessor:
         queryProcessor.disconnect()
 

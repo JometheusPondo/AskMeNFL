@@ -64,4 +64,25 @@ class DatabaseConnection:
             logger.error(f"Query execute failed: {e}")
             raise ValueError(f"Query execute failed: {e}")
 
+    def getFullSchema(self) -> str:
+        if not self._isConnected:
+            return "Not connected to database"
+
+        schemaText = ""
+
+        allTables = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+        tables = self.executeQuery(allTables)
+
+        for t in tables['name']:
+            schemaText += f"\n**Table: {t}**\n"
+
+            columns = f"PRAGMA table_info({t})"
+            columns = pd.read_sql_query(columns, self._connection)
+
+            schemaText += f"Columns:\n"
+            for c, col in columns.iterrows():
+                schemaText += f"  - {col['name']} ({col['type']})\n"
+
+        return schemaText
+
 

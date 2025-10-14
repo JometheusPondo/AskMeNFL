@@ -7,6 +7,7 @@ from llm.provider import LLMProvider
 
 class GeminiProvider(LLMProvider):
     def __init__(self, modelName: str = 'gemini-2.5-pro'):
+        self._databaseSchema = None
         self._modelName = modelName
         self._apiKey = os.getenv('GEMINI_API_KEY')
 
@@ -17,41 +18,11 @@ class GeminiProvider(LLMProvider):
         return self._callGeminiAPI(query)
 
     def _callGeminiAPI(self, query: str) -> Any | None:
-        systemPrompt = """You are an expert NFL data analyst assistant. Convert natural language queries about NFL play-by-play data into executable SQLite queries.
+        systemPrompt = f"""You are an expert NFL data analyst assistant. Convert natural language queries about NFL play-by-play data into executable SQLite queries.
 
                         `**Database Schema:**
+                        {self._databaseSchema}
 
-                        **Main Table: `plays`** 
-                        Contains play-by-play data with these key columns:
-                        * Basic Info: play_id, game_id, season, week, season_type, qtr, down, ydstogo, yards_gained, play_type
-                        * Teams: home_team, away_team, posteam, defteam  
-                        * Players: passer_player_name, receiver_player_name, rusher_player_name
-                        * Pass Data: pass_attempt, complete_pass, incomplete_pass, passing_yards, receiving_yards, air_yards, yards_after_catch
-                        * Rush Data: rush_attempt, rushing_yards, rusher_player_name
-                        * Scoring: touchdown, pass_touchdown, rush_touchdown, field_goal_attempt, extra_point_attempt
-                        * Turnovers: interception, interception_player_name, fumble, fumble_lost
-
-                        **DEFENSIVE STATS in plays table - EXACT COLUMN NAMES:**
-                        * Sacks: sack, sack_player_id, sack_player_name, half_sack_1_player_name, half_sack_2_player_name
-                        * QB Hits: qb_hit, qb_hit_1_player_id, qb_hit_1_player_name, qb_hit_2_player_id, qb_hit_2_player_name  
-                        * Tackles for Loss: tackled_for_loss, tackle_for_loss_1_player_id, tackle_for_loss_1_player_name, tackle_for_loss_2_player_name
-                        * Forced Fumbles: fumble_forced, forced_fumble_player_1_player_id, forced_fumble_player_1_player_name, forced_fumble_player_2_player_name
-                        * Interceptions: interception, interception_player_id, interception_player_name
-                        * Tackles: solo_tackle, solo_tackle_1_player_name, solo_tackle_2_player_name, assist_tackle, assist_tackle_1_player_name, assist_tackle_2_player_name, assist_tackle_3_player_name, assist_tackle_4_player_name
-
-                        **Table: `weekly_stats`**
-                        Player stats by week with columns:
-                        * Identity: player_id, player_name, player_display_name, position, position_group, recent_team, season, week
-                        * Passing: completions, attempts, passing_yards, passing_tds, interceptions, sacks (sacks allowed), sack_yards
-                        * Rushing: carries, rushing_yards, rushing_tds, rushing_fumbles, rushing_fumbles_lost  
-                        * Receiving: receptions, targets, receiving_yards, receiving_tds, receiving_fumbles, receiving_fumbles_lost
-                        * Special: special_teams_tds, fantasy_points, fantasy_points_ppr
-
-                        **Other Tables:**
-                        * `seasonal_stats` - season aggregated stats (similar structure to weekly_stats)
-                        * `ngs_passing`, `ngs_rushing`, `ngs_receiving` - Next Gen Stats
-                        * `seasonal_rosters`, `weekly_rosters` - roster info with player details
-                        * `schedules`, `draft_picks`, `combine_results` - contextual data
 
                         **CRITICAL RULES:**
                         1. **Exact Column Names**: ONLY use column names that exist in the schema above
