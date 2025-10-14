@@ -374,7 +374,7 @@ async def get_available_models():
         {
             "id": "gpt-oss",
             "name": "GPT-OSS (Local)",
-            "description": "Local gpt model",
+            "description": "Local model",
             "available": True,
             "cost": "Free"
         }

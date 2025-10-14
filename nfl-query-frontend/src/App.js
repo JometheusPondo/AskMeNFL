@@ -410,7 +410,7 @@ const App = () => {
       </main>
 
       <footer className="app-footer">
-        <p>Powered by FastAPI + React • 2024 NFL Data</p>
+        <p>Powered by FastAPI + React </p>
       </footer>
     </div>
   );
