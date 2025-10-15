@@ -91,7 +91,25 @@ class MessageResponse(BaseModel):
     message: str
 
 
-# ==================================================================
+# SAVED QUERY REQUEST CLASSES
+class SaveQueryRequest(BaseModel):
+    queryText: str = Field(..., description = "Query text")
+    queryName: Optional[str] = Field(None, description = "Query name")
+
+
+class SavedQueryResponse(BaseModel):
+    success: bool
+    message: str
+    query: Optional[Dict[str, Any]] = None
+
+
+class SavedQueriesListResponse(BaseModel):
+    success: bool
+    queries: List[Dict[str, Any]] = Field(default_factory = list)
+    count: int = 0
+
+
+# ====================================================================
 
 
 # Initialization
@@ -383,6 +401,154 @@ async def delete_account(currentUser: User = Depends(getCurrentUser)):
         return MessageResponse(success = False, message = "Account could not be deleted")
 
     return MessageResponse(success = True, message = "Account deleted successfully")
+
+
+# SAVED QUERY ENDPOINTS
+
+@app.post("/queries/save", response_model = SavedQueryResponse, summary = "Save a query")
+async def save_query(request: SaveQueryRequest, currentUser: User = Depends(getCurrentUser)):
+    if not userDb:
+        raise HTTPException(status_code = 503, detail = "Service not initialized")
+
+    try:
+        if request.queryName:
+            queryName = request.queryName
+        else:
+            queryName = "Untitled query"
+
+        savedQuery = userDb.createSavedQuery(
+            userID = currentUser.id,
+            queryContent = request.queryText,
+            queryName = queryName
+        )
+
+        return SavedQueryResponse(
+            success = True,
+            message = "Query saved successfully",
+            query = savedQuery.toDict()
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to save query: {e}")
+        return SavedQueryResponse(
+            success = False,
+            message = "Failed to save query"
+        )
+
+
+@app.get("/queries", response_model = SavedQueriesListResponse, summary = "Get all saved queries")
+async def get_saved_queries(currentUser: User = Depends(getCurrentUser)):
+    if not userDb:
+        raise HTTPException(status_code=503, detail="Service not initialized")
+
+    try:
+        queries = userDb.getAllSavedQueries(currentUser.id)
+        queriesList = [q.toDict() for q in queries]
+
+        return SavedQueriesListResponse(
+            success = True,
+            queries = queriesList,
+            count = len(queriesList)
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to get saved queries: {e}")
+        return SavedQueriesListResponse(
+            success = False,
+            queries = [],
+            count = 0
+        )
+
+
+@app.put("/queries/{queryId}", response_model = SavedQueryResponse, summary = "Update a saved query")
+async def update_saved_query(
+        queryId: int,
+        request: SaveQueryRequest,
+        currentUser: User = Depends(getCurrentUser)
+):
+
+    if not userDb:
+        raise HTTPException(status_code = 503, detail = "Service not initialized")
+
+    query = userDb.getQueryByID(queryId)
+
+    if query is None:
+        return SavedQueryResponse(
+            success = False,
+            message = "Query not found"
+        )
+
+    if query.userID != currentUser.id:
+        return SavedQueryResponse(
+            success = False,
+            message = "Unauthorized to modify this query"
+        )
+
+    try:
+        updatedQuery = userDb.updateSavedQuery(
+            queryID = queryId,
+            queryContent = request.queryText,
+            queryName = request.queryName
+        )
+
+        return SavedQueryResponse(
+            success = True,
+            message = "Query updated successfully",
+            query = updatedQuery.toDict()
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to update query: {e}")
+        return SavedQueryResponse(
+            success = False,
+            message = "Failed to update query"
+        )
+
+
+@app.delete("/queries/{queryId}", response_model = MessageResponse, summary = "Delete a saved query")
+async def delete_saved_query(
+        queryId: int,
+        currentUser: User = Depends(getCurrentUser)
+):
+
+    if not userDb:
+        raise HTTPException(status_code = 503, detail = "Service not initialized")
+
+    query = userDb.getQueryByID(queryId)
+
+    if query is None:
+        return MessageResponse(
+            success = False,
+            message = "Query not found"
+        )
+
+    if query.userID != currentUser.id:
+        return MessageResponse(
+            success = False,
+            message = "Unauthorized to delete this query"
+        )
+
+    try:
+        success = userDb.deleteSavedQuery(queryId)
+
+        if not success:
+            return MessageResponse(
+                success = False,
+                message = "Failed to delete query"
+            )
+
+        return MessageResponse(
+            success = True,
+            message = "Query deleted successfully"
+        )
+
+    except Exception as e:
+        logger.error(f"Failed to delete query: {e}")
+        return MessageResponse(
+            success = False,
+            message = "Failed to delete query"
+        )
+
 
 if __name__ == "__main__":
     import uvicorn

@@ -17,10 +17,10 @@ class UserDatabase:
                             email TEXT UNIQUE NOT NULL,
                             encPassword TEXT NOT NULL,
                             createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                            updatedAT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                            );
+                            updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                            );""",
                             
-                          CREATE TABLE IF NOT EXISTS saved_queries (
+                          """CREATE TABLE IF NOT EXISTS saved_queries (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             userID INTEGER NOT NULL,
                             queryContent TEXT NOT NULL,
