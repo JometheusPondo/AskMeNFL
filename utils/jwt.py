@@ -9,3 +9,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 def createAccessToken(data: dict, expiresMinutes: int = ACCESS_TOKEN_EXPIRE_MINUTES) -> str:
     pass
+
+def verifyToken(token: str) -> Optional[str]:
+    pass
