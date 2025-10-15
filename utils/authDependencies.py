@@ -5,25 +5,23 @@ from models.user import User
 from database.userDB import UserDatabase
 from utils.jwt import verifyToken
 
+_userDb: Optional[UserDatabase] = None
 security = HTTPBearer()
 
 def setUserDatabase(db: UserDatabase):
     global _userDb
     _userDb = db
 
-def getUserDatabase(db: UserDatabase):
+def getUserDatabase() -> UserDatabase:
     if _userDb is None:
         raise HTTPException(
-            status_code = status.HTTP_401_UNAVAILABLE,
+            status_code = status.HTTP_503_SERVICE_UNAVAILABLE,
             detail = "Database not initialized"
         )
 
     return _userDb
 
-def getCurrentUser(
-        credentials: HTTPAuthorizationCredentials = Depends(security),
-        db: UserDatabase = None
-) -> User:
+def getCurrentUser(credentials: HTTPAuthorizationCredentials = Depends(security), db: UserDatabase = Depends(getUserDatabase)) -> User:
     token = credentials.credentials
     username = verifyToken(token)
 
@@ -46,7 +44,7 @@ def getCurrentUser(
     return user
 
 
-def getOptionalUser(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security), db: UserDatabase = None) -> Optional[User]:
+def getOptionalUser(credentials: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer(auto_error = False)), db: UserDatabase = Depends(getUserDatabase)) -> Optional[User]:
     if credentials is None:
         return None
 

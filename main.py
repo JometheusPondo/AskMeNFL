@@ -3,35 +3,43 @@
 FastAPI Backend for NFL Natural Language Query System
 Refactored with OOP architecture
 """
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 import logging
 from contextlib import asynccontextmanager
+from database.userDB import UserDatabase
+from utils.authDependencies import setUserDatabase
 
 
 from services.queryProcessor import QueryProcessor
 from llm.geminiProvider import GeminiProvider
 
+# GLOBAL VARIABLES
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+userDb: Optional[UserDatabase] = None
 
+# DB NAMES
 
-# ===========================
+NFL_DB = 'nfl_complete_database.db'
+USER_DB = 'nfl_users.db'
+
 # Pydantic Models (API Layer)
-# ===========================
 
 class QueryRequest(BaseModel):
     # Request model for query endpoint
-    question: str = Field(..., description="What do you want to know?")
-    include_sql: bool = Field(default=False, description="Include generated SQL in response")
-    model: str = Field(default="gemini", description="LLM model to use (currently only 'gemini')")
+    question: str = Field(..., description = "What do you want to know?")
+    include_sql: bool = Field(default = False, description = "Include generated SQL in response")
+    model: str = Field(default = "gemini", description = "LLM model to use (currently only 'gemini')")
 
 
+# Query response endpoint class
 class QueryResponse(BaseModel):
-    # Response model for query endpoint
+
     success: bool
     data: Optional[List[Dict[str, Any]]] = None
     columns: Optional[List[str]] = None
@@ -41,8 +49,9 @@ class QueryResponse(BaseModel):
     rowsReturned: int = 0
 
 
+# db status endpoint class
 class DatabaseStatus(BaseModel):
-    # Response model for status endpoint
+
     connected: bool
     totalPlays: int = 0
     error: Optional[str] = None
@@ -54,26 +63,29 @@ queryProcessor: Optional[QueryProcessor] = None
 geminiProvider: Optional[GeminiProvider] = None
 
 
-# ==============
+
 # Initialization
-# ==============
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
-    global queryProcessor, geminiProvider
+    global queryProcessor, geminiProvider, userDb
 
-    # Startup: Initialize provider and processor
     logger.info("🚀 Initializing Ask me NFL...")
 
     try:
-        geminiProvider = GeminiProvider(modelName='gemini-2.5-pro')
+        geminiProvider = GeminiProvider(modelName = 'gemini-2.5-pro')
         logger.info(f"✓ Gemini Provider initialized")
 
         queryProcessor = QueryProcessor(
-            db_path='nfl_complete_database.db',
-            llm_provider=geminiProvider
+            db_path = NFL_DB,
+            llm_provider = geminiProvider
         )
+
+        userDb = UserDatabase(USER_DB)
+        userDb.createTable()
+        setUserDatabase(userDb)
+        logger.info('User database initialized')
 
         queryProcessor.connect()
 
