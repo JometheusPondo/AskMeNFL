@@ -3,19 +3,21 @@
 FastAPI Backend for NFL Natural Language Query System
 Refactored with OOP architecture
 """
+import sqlite3
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 import logging
 from contextlib import asynccontextmanager
 from database.userDB import UserDatabase
-from utils.authDependencies import setUserDatabase
-
-
+from models.user import User
+from utils.authDependencies import setUserDatabase, getCurrentUser
+from utils.jwt import createAccessToken
 from services.queryProcessor import QueryProcessor
 from llm.geminiProvider import GeminiProvider
+from utils.password import hashPassword, verifyPassword
 
 # GLOBAL VARIABLES
 
@@ -31,7 +33,6 @@ USER_DB = 'nfl_users.db'
 # Pydantic Models (API Layer)
 
 class QueryRequest(BaseModel):
-    # Request model for query endpoint
     question: str = Field(..., description = "What do you want to know?")
     include_sql: bool = Field(default = False, description = "Include generated SQL in response")
     model: str = Field(default = "gemini", description = "LLM model to use (currently only 'gemini')")
@@ -39,7 +40,6 @@ class QueryRequest(BaseModel):
 
 # Query response endpoint class
 class QueryResponse(BaseModel):
-
     success: bool
     data: Optional[List[Dict[str, Any]]] = None
     columns: Optional[List[str]] = None
@@ -51,20 +51,53 @@ class QueryResponse(BaseModel):
 
 # db status endpoint class
 class DatabaseStatus(BaseModel):
-
     connected: bool
     totalPlays: int = 0
     error: Optional[str] = None
 
 
+# AUTH REQUEST CLASSES
+
+class RegisterRequest(BaseModel):
+    username: str = Field(..., min_length = 3, max_length = 50, description = "Username")
+    email: str = Field(..., description = "Email address")
+    password: str = Field(..., min_length = 8, description = "Password (minimum 8 characters)")
 
 
-queryProcessor: Optional[QueryProcessor] = None
-geminiProvider: Optional[GeminiProvider] = None
+class LoginRequest(BaseModel):
+    username: str = Field(..., description = "Username")
+    password: str = Field(..., description = "Password"
 
+                          )
+class AuthResponse(BaseModel):
+    success: bool
+    message: str
+    token: Optional[str] = None
+    user: Optional[Dict[str, Any]] = None
+
+
+class UpdateProfileRequest(BaseModel):
+    username: Optional[str] = Field(None, min_length = 3, max_length = 50, description = "Username")
+    email: Optional[str] = Field(None)
+
+
+class ChangePasswordRequest(BaseModel):
+    currentPassword: str = Field(..., description = "Verify your current password")
+    newPassword: str = Field(..., min_length = 8, description = "New password (minimum 8 characters)")
+
+
+class MessageResponse(BaseModel):
+    success: bool
+    message: str
+
+
+# ==================================================================
 
 
 # Initialization
+
+queryProcessor: Optional[QueryProcessor] = None
+geminiProvider: Optional[GeminiProvider] = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -189,7 +222,7 @@ async def get_available_models():
     return {"models": models}
 
 
-@app.post("/query", response_model=QueryResponse, summary="Execute query")
+@app.post("/query", response_model = QueryResponse, summary = "Execute query")
 async def execute_query(request: QueryRequest):
 
     if not queryProcessor:
@@ -227,7 +260,7 @@ async def execute_query(request: QueryRequest):
     )
 
 
-@app.get("/examples", summary="Example queries")
+@app.get("/examples", summary = "Example queries")
 async def get_examples():
 
     return {
@@ -242,9 +275,117 @@ async def get_examples():
         ]
     }
 
+# =====================================
+
+# AUTH ENDPOINTS
+
+@app.post("/auth/register", response_model = AuthResponse, summary = "Register new user")
+async def register_user(request: RegisterRequest):
+    if not userDb:
+        raise HTTPException(status_code = 503, detail="Service not initialized")
+
+    if userDb.getUserByUsername(request.username):
+        return AuthResponse(success = False, message = "Username already registered")
+    if userDb.getUserByEmail(request.email):
+        return AuthResponse(success = False, message = "Email already registered")
+
+    encPassword = hashPassword(request.password)
+
+    try:
+        newUser = userDb.createUser(request.username, request.email, encPassword)
+        token = createAccessToken({"sub": newUser.username})
+
+        return AuthResponse(success = True, message = "User registered successfully",
+                            token = token, user = newUser.toDict())
+
+    except sqlite3.IntegrityError as ie:
+        return AuthResponse(success = False, message = "Username or email already registered")
+    except Exception as ex:
+        logger.error(f"Registration failed: ")
+        return AuthResponse(success = False, message = str(ex))
+
+
+@app.post("/auth/login", response_model = AuthResponse, summary = "Login")
+async def login_user(request: LoginRequest):
+    if not userDb:
+        raise HTTPException(status_code = 503, detail="Service not initialized")
+
+    user = userDb.getUserByUsername(request.username)
+    if user is None:
+        return AuthResponse(success = False, message = "Invalid credentials")
+
+    if not verifyPassword(request.password, user.encPassword):
+        return AuthResponse(success = False, message = "Invalid credentials")
+
+    token = createAccessToken({"sub": user.username})
+    return AuthResponse(success = True, message = "Login successful", token = token, user = user.toDict())
+
+
+@app.get("/auth/profile", response_model = Dict[str, Any], summary = "Get user profile")
+async def get_profile(currentUser: User = Depends(getCurrentUser)):
+    return currentUser.toDict()
+
+
+@app.put("/auth/profile", response_model = MessageResponse, summary = "Update user profile")
+async def update_profile(request: UpdateProfileRequest, currentUser: User = Depends(getCurrentUser)):
+    if not userDb:
+        raise HTTPException(status_code = 503, detail="Service not initialized")
+
+    if request.username is None and request.email is None:
+        return MessageResponse(success = False, message = "No user to update")
+
+    try:
+        userDb.updateUser(
+            currentUser.id,
+            username = request.username,
+            email = request.email
+        )
+
+        return MessageResponse(success = True, message = "User profile updated successfully")
+
+    except sqlite3.IntegrityError as ie:
+        return MessageResponse(success = False, message = "Username or email already exists")
+    except Exception as ex:
+        logger.error(f"Profile update failed: ")
+        return MessageResponse(success = False, message = str(ex))
+
+
+@app.put("/auth/password", response_model = MessageResponse, summary = "Change password")
+async def change_password(request: ChangePasswordRequest, currentUser: User = Depends(getCurrentUser)):
+    if not userDb:
+        raise HTTPException(status_code = 503, detail="Service not initialized")
+
+    if not verifyPassword(request.currentPassword, currentUser.encPassword):
+        return MessageResponse(success = False, message = "Current password is incorrect")
+
+    encPassword = hashPassword(request.newPassword)
+
+    try:
+        userDb.updatePassword(
+            currentUser.id,
+            encPassword
+        )
+
+        return MessageResponse(success = True, message = "Password changed successfully")
+
+    except Exception as ex:
+        logger.error(f"Change password failed: ")
+        return MessageResponse(success = False, message = str(ex))
+
+
+@app.delete("/auth/account", response_model = MessageResponse, summary = "Delete account")
+async def delete_account(currentUser: User = Depends(getCurrentUser)):
+    if not userDb:
+        raise HTTPException(status_code = 503, detail = "Service not initialized")
+
+    isDeleted = userDb.deleteUser(currentUser.id)
+    if not isDeleted:
+        return MessageResponse(success = False, message = "Account could not be deleted")
+
+    return MessageResponse(success = True, message = "Account deleted successfully")
+
 if __name__ == "__main__":
     import uvicorn
-
     logger.info("Starting Ask me NFL...")
 
     uvicorn.run(
