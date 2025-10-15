@@ -90,7 +90,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
-    logger.info("Shutting down Ask me NFL...")
+    logger.info("Shutting down Ask Me NFL...")
     if queryProcessor:
         queryProcessor.disconnect()
 

@@ -23,7 +23,6 @@ const apiCall = async (endpoint, options = {}) => {
 };
 
 
-
 // Database Status Component
 const DatabaseStatus = ({ status, onRefresh }) => {
   return (
@@ -72,7 +71,7 @@ const QueryInput = ({ onSubmit, isLoading, value, onChange }) => {
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Ask a question about 2024 NFL statistics..."
+          placeholder="Ask a question about NFL statistics..."
           className="query-input"
           disabled={isLoading}
         />
@@ -92,7 +91,7 @@ const QueryInput = ({ onSubmit, isLoading, value, onChange }) => {
 const ExampleQueries = ({ onSelectExample, examples, isLoading }) => {
   return (
     <div className="examples-section">
-      <h3>💡 Example Queries</h3>
+      <h3>💡 Example Questions</h3>
       <div className="examples-grid">
         {examples.map((example, index) => (
           <button
@@ -345,8 +344,8 @@ const App = () => {
     <div className="App">
       <header className="app-header">
         <div className="hero-section">
-          <h1>🏈 NFL Stat Assistant</h1>
-          <p>Ask questions about 2024 NFL statistics in plain English!</p>
+          <h1>🏈 Ask Me NFL</h1>
+          <p>Ask questions about NFL statistics in plain English!</p>
         </div>
       </header>
 
