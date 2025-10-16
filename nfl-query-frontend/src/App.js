@@ -1,8 +1,9 @@
-// App.js - Main React Component for NFL Query Interface
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { useAuth } from './contexts/AuthContext';
+import Login from './components/login';
+import Register from './components/register';
 
-// API Configuration
 const API_BASE_URL = 'http://localhost:8000';
 
 // Utility function for API calls
@@ -205,6 +206,11 @@ const SqlDisplay = ({ query, isVisible, onToggle }) => {
 
 // Main App Component
 const App = () => {
+  const { user, token, logout, isAuthenticated } = useAuth();
+  const [showLogin, setShowLogin] - useState(false);
+  const [showRegister, setShowRegister] = useState(false)
+
+
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState(null);
@@ -216,7 +222,8 @@ const App = () => {
   const [selectedModel, setSelectedModel] = useState('gpt-oss'); // Default to gpt-oss
   const [availableModels, setAvailableModels] = useState([]);
 
-  // Load initial data
+
+
   useEffect(() => {
     loadDbStatus();
     loadExamples();
