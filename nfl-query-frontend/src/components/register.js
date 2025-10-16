@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import './Auth.css';
+import { useAuth } from '../contexts/authContext';
+import './auth.css';
 
 export const Register = ({ onSwitchToLogin, onClose }) => {
   const [username, setUsername] = useState('');

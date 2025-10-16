@@ -1,27 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from './contexts/authContext';
 import Login from './components/login';
 import Register from './components/register';
 
 const API_BASE_URL = 'http://localhost:8000';
 
-// Utility function for API calls
-const apiCall = async (endpoint, options = {}) => {
-  const url = `${API_BASE_URL}${endpoint}`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    ...options,
-  };
-  
-  const response = await fetch(url, config);
-  if (!response.ok) {
-    throw new Error(`API Error: ${response.statusText}`);
-  }
-  return response.json();
-};
+
 
 
 // Database Status Component
@@ -207,7 +192,7 @@ const SqlDisplay = ({ query, isVisible, onToggle }) => {
 // Main App Component
 const App = () => {
   const { user, token, logout, isAuthenticated } = useAuth();
-  const [showLogin, setShowLogin] - useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false)
 
 
@@ -219,8 +204,25 @@ const App = () => {
   const [examples, setExamples] = useState([]);
   const [showSql, setShowSql] = useState(false);
 
-  const [selectedModel, setSelectedModel] = useState('gpt-oss'); // Default to gpt-oss
+  const [selectedModel, setSelectedModel] = useState('gpt-oss');
   const [availableModels, setAvailableModels] = useState([]);
+
+  const apiCall = async (endpoint, options = {}) => {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+      },
+      ...options,
+    };
+
+    const response = await fetch(url, config);
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`);
+    }
+    return response.json();
+    };
 
 
 
@@ -281,7 +283,7 @@ const App = () => {
 
     return (
       <div className="model-selector">
-        <h3>🤖 Model Selection</h3>
+        <h3>Model Selection</h3>
         <div className="model-options">
           {availableModels.map(model => (
             <div key={model.id} className="model-option">
@@ -353,6 +355,20 @@ const App = () => {
         <div className="hero-section">
           <h1>🏈 Ask Me NFL</h1>
           <p>Ask questions about NFL statistics in plain English!</p>
+
+          <div className="auth-section">
+            { isAuthenticated ? (
+              <div className="user-info">
+                <span>Welcome, <strong>{ user.username }</strong></span>
+                <button onClick={ logout } className="logout-btn">Logout</button>
+              </div>
+            ) : (
+              <div className="auth-buttons">
+                <button onClick={() => setShowLogin(true)} className="login-btn">Login</button>
+                <button onClick={() => setShowRegister(true)} className="register-btn">Register</button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -418,6 +434,27 @@ const App = () => {
       <footer className="app-footer">
         <p>Powered by FastAPI + React </p>
       </footer>
+
+      { showLogin && (
+        <Login
+          onClose={() => setShowLogin(false)}
+          onSwitchToRegister={() => {
+            setShowLogin(false);
+            setShowRegister(true);
+          }}
+        />
+      )}
+
+      { showRegister && (
+        <Register
+          onClose={() => setShowRegister(false)}
+          onSwitchToLogin={() => {
+            setShowRegister(false);
+            setShowLogin(true);
+          }}
+        />
+      )}
+
     </div>
   );
 };

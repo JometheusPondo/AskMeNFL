@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import './Auth.css';
+import { useAuth } from '../contexts/authContext';
+import './auth.css';
 
 export const Login = ({ onSwitchToRegister, onClose }) => {
   const [username, setUsername] = useState('');
@@ -66,6 +66,16 @@ export const Login = ({ onSwitchToRegister, onClose }) => {
           {error && (
             <div className="auth-error">
               ⚠️ {error}
+              { error === "Invalid credentials" && (
+                <div className="forgot-password-hint">
+                  <p>Forgot your password?
+                  <button className="forgot-password-link"
+                  onClick={() => alert("Password reset feature coming soon! Please contact support")}>
+                  Reset Password
+                </button>
+                </p>
+              </div>
+            )}
             </div>
           )}
 

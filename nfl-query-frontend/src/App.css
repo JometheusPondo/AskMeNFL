@@ -19,7 +19,7 @@ body {
   flex-direction: column;
 }
 
-/* Header Styles */
+
 .app-header {
   padding: 2rem 1rem;
   text-align: center;
@@ -39,7 +39,7 @@ body {
   font-weight: 300;
 }
 
-/* Main Layout */
+
 .app-main {
   flex: 1;
   padding: 0 1rem 2rem 1rem;
@@ -53,14 +53,14 @@ body {
   margin: 0 auto;
 }
 
-/* Sidebar Styles */
+
 .sidebar {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* Status Card */
+
 .status-card {
   background: white;
   border-radius: 12px;
@@ -163,7 +163,6 @@ body {
   border-left: 3px solid #e74c3c;
 }
 
-/* Examples Section */
 .examples-section {
   background: white;
   border-radius: 12px;
@@ -206,7 +205,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Main Content */
 .main-content {
   background: white;
   border-radius: 12px;
@@ -215,7 +213,6 @@ body {
   min-height: 600px;
 }
 
-/* Query Form */
 .query-form {
   margin-bottom: 2rem;
 }
@@ -269,7 +266,6 @@ body {
   transform: none;
 }
 
-/* Loading State */
 .loading-message {
   text-align: center;
   padding: 3rem;
@@ -291,7 +287,6 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-/* Error Message */
 .error-message {
   background: #fdf2f2;
   border: 1px solid #fecaca;
@@ -309,7 +304,6 @@ body {
   color: #b91c1c;
 }
 
-/* Results Section */
 .results-section {
   margin-bottom: 2rem;
 }
@@ -356,7 +350,6 @@ body {
   background: #229954;
 }
 
-/* Table Styles */
 .table-container {
   overflow-x: auto;
   border-radius: 8px;
@@ -393,7 +386,6 @@ body {
   border-bottom: none;
 }
 
-/* No Results */
 .no-results {
   text-align: center;
   padding: 3rem;
@@ -405,7 +397,6 @@ body {
   color: #5d6d7e;
 }
 
-/* SQL Display */
 .sql-section {
   margin-top: 1.5rem;
 }
@@ -436,7 +427,6 @@ body {
   color: #495057;
 }
 
-/* Footer */
 .app-footer {
   text-align: center;
   padding: 2rem;
@@ -444,7 +434,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .layout {
     grid-template-columns: 300px 1fr;
@@ -514,9 +503,7 @@ body {
   }
 }
 
-/* ADD THESE STYLES to your existing App.css */
 
-/* Model Selector Styles */
 .model-selector {
   background: white;
   border-radius: 12px;
@@ -605,13 +592,11 @@ body {
   font-weight: 500;
 }
 
-/* Update loading message to show model name */
 .loading-message p {
   font-size: 1.1rem;
   margin-top: 0.5rem;
 }
 
-/* Responsive adjustments for model selector */
 @media (max-width: 768px) {
   .model-selector {
     padding: 1rem;
@@ -630,12 +615,10 @@ body {
   }
 }
 
-/* Optional: Add animation for model switching */
 .model-option {
   animation: fadeIn 0.3s ease-in;
 }
 
-/* Style for selected model in timing info */
 .timing-info {
   display: flex;
   gap: 1rem;
@@ -648,7 +631,6 @@ body {
   white-space: nowrap;
 }
 
-/* Animation for smooth transitions */
 .results-section,
 .error-message,
 .loading-message {
@@ -660,3 +642,67 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+.auth-section {
+  margin-top: 1.5rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.user-info span {
+  color: white;
+  font-size: 1rem;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.login-btn, .register-btn, .logout-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+}
+
+.login-btn {
+  background: white;
+  color: #007bff;
+}
+
+.login-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.register-btn {
+  background: #007bff;
+  color: white;
+}
+
+.register-btn:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+.logout-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+}
