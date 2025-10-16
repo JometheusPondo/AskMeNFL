@@ -158,7 +158,7 @@ const ResultsTable = ({ data, columns, timing, rowsReturned }) => {
               <tr key={index}>
                 {columns.map(col => (
                   <td key={col}>
-                    {typeof row[col] === 'number' ? 
+                    {typeof row[col] === 'number' && col !== 'season' ?
                       Number(row[col]).toLocaleString() : 
                       row[col]
                     }

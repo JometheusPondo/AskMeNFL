@@ -122,7 +122,7 @@ async def lifespan(app: FastAPI):
 
     global queryProcessor, geminiProvider, userDb
 
-    logger.info("🚀 Initializing Ask me NFL...")
+    logger.info("Initializing Ask me NFL...")
 
     try:
         geminiProvider = GeminiProvider(modelName = 'gemini-2.5-pro')
@@ -283,13 +283,14 @@ async def get_examples():
 
     return {
         "examples": [
-            "Top 5 QBs by passing yards per attempt in 2024",
-            "Jared Goff vs. Patrick Mahomes major statistics",
-            "Team Third down conversion leaders with minimum 50 attempts",
-            "Top 10 teams redzone touchdown percentage",
-            "Compare Sam Darnold and Baker Mayfield all passing stats",
-            "Which defenders have the most sacks in 2024?",
-            "Show me Myles Garrett's career statistics"
+            "Top 5 QBs by passing yards per attempt in 2025",
+            "Jared Goff vs. Patrick Mahomes major QB statistics",
+            "When was the last time Jared Goff threw 3 interceptions in a single game?",
+            "2024 QB leaders in redzone interceptions",
+            "Compare Sam Darnold and Baker Mayfield all passing stats 2025",
+            "What's the highest single game sack count for a defender, all-time?",
+            "Which teams have turned the ball over the most on third down?",
+            "Show me TJ Watt's total sacks vs. divisional opponents all-time"
         ]
     }
 
