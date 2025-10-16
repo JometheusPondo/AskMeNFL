@@ -3,6 +3,8 @@ import './App.css';
 import { useAuth } from './contexts/authContext';
 import Login from './components/login';
 import Register from './components/register';
+import SavedQueries from './components/savedQueries';
+
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -73,7 +75,7 @@ const QueryInput = ({ onSubmit, isLoading, value, onChange }) => {
   );
 };
 
-// Example Queries Component
+// Example & Saved Queries Component
 const ExampleQueries = ({ onSelectExample, examples, isLoading }) => {
   return (
     <div className="examples-section">
@@ -194,6 +196,7 @@ const App = () => {
   const { user, token, logout, isAuthenticated } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false)
+  const [lastExecutedQuery, setLastExecutedQuery] = useState('');
 
 
   const [query, setQuery] = useState('');
@@ -334,6 +337,7 @@ const App = () => {
       
       if (response.success) {
         setResults(response);
+        setLastExecutedQuery(queryText);
       } else {
         setError(response.error || 'Query failed');
       }
@@ -343,6 +347,16 @@ const App = () => {
       setIsLoading(false);
     }
   };
+
+  const handleLoadSavedQuery = (queryText) => {
+    setQuery(queryText);
+    executeQuery(queryText);
+  };
+
+  const handleQuerySaved = () => {
+    console.log('Search saved successfully')
+  };
+
 
   const handleExampleClick = (exampleQuery) => {
     setQuery(exampleQuery);
@@ -387,6 +401,15 @@ const App = () => {
               onSelectExample={handleExampleClick}
               isLoading={isLoading}
             />
+
+            { isAuthenticated && (
+              <SavedQueries
+               token = { token }
+               onLoadQuery = { handleLoadSavedQuery }
+               currentQuery = { lastExecutedQuery }
+               onQuerySaved = { handleQuerySaved }
+              />
+            )}
           </div>
 
           <div className="main-content">

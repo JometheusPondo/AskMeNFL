@@ -11,6 +11,7 @@ class User:
         return {
             'id': self.id,
             'username': self.username,
+            'email': self.email,
             'createdAt': self.createdAt,
             'updatedAt': self.updatedAt,
         }
