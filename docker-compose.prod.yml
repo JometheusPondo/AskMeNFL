@@ -1,0 +1,54 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nfl-backend-prod
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount databases as volumes
+      - ./nfl_complete_database.db:/app/nfl_complete_database.db
+      - ./nfl_users.db:/app/nfl_users.db
+      - nfl-logs:/app/logs
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - ENVIRONMENT=production
+    networks:
+      - nfl-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+  frontend:
+    build:
+      context: ./nfl-query-frontend
+      dockerfile: Dockerfile
+    container_name: nfl-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - nfl-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+networks:
+  nfl-network:
+    driver: bridge
+
+volumes:
+  nfl-logs:
+    driver: local

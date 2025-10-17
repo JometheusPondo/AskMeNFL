@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nfl-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount databases
+      - ./nfl_complete_database.db:/app/nfl_complete_database.db
+      - ./nfl_users.db:/app/nfl_users.db
+      # Mount logs
+      - ./logs:/app/logs
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - ENVIRONMENT=development
+    env_file:
+      - g-api.env
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - nfl-network
+
+  frontend:
+    build:
+      context: ./nfl-query-frontend
+      dockerfile: Dockerfile
+    container_name: nfl-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    networks:
+      - nfl-network
+
+networks:
+  nfl-network:
+    driver: bridge
