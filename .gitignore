@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# Frontend
+nfl-query-frontend/node_modules/
+nfl-query-frontend/build/
+
+# Tests
+tests/
+test_*.py
+debug_*.py
+*.bak
+*.backup
+
+# Documentation
+*.md
+docs/
+
+# Environment files (will be provided at runtime)
+.env
+g-api.env
+.env.production
+
+# Misc
+.DS_Store
+old/
+
+# Test databases
+test_users.db
