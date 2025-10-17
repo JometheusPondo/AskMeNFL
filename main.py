@@ -146,7 +146,8 @@ async def lifespan(app: FastAPI):
         geminiProvider._databaseSchema = schema
 
         logger.info(f"✓ Database connected: {queryProcessor.isConnected}")
-        logger.info(f"✓ Total plays loaded: {queryProcessor.totalPlays:,}")
+        total_plays = queryProcessor.totalPlays if queryProcessor.totalPlays else 0
+        logger.info(f"✓ Total plays loaded: {total_plays:,}")
         logger.info("✓ Ask me NFL ready!")
 
     except Exception as e:

@@ -316,6 +316,10 @@ class NFLDataDownloader:
 
 
 if __name__ == "__main__":
+    import sys
+
+    db_path = sys.argv[1] if len(sys.argv) > 1 else "nfl_complete_database.db"
+
     print("🏈 NFL Complete Data Downloader")
     print("This will download ALL available NFL data from nfl_data_py")
     print("Estimated download time: 30-60 minutes")
