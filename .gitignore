@@ -49,3 +49,6 @@ old/
 
 # Test databases
 test_users.db
+*.db
+nfl_complete_database.db
+nfl_users.db
