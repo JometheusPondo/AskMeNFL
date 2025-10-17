@@ -3,6 +3,7 @@
 FastAPI Backend for NFL Natural Language Query System
 Refactored with OOP architecture
 """
+import os
 import sqlite3
 
 from fastapi import FastAPI, HTTPException, Depends
@@ -27,8 +28,9 @@ userDb: Optional[UserDatabase] = None
 
 # DB NAMES
 
-NFL_DB = 'nfl_complete_database.db'
-USER_DB = 'nfl_users.db'
+DATA_DIR = os.getenv('DATA_DIR', '/app/data')
+NFL_DB = os.path.join(DATA_DIR, 'nfl_complete_database.db')
+USER_DB = os.path.join(DATA_DIR, 'user_database.db')
 
 # Pydantic Models (API Layer)
 

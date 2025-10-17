@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p /app/data
+
 # Check if database exists
 if [ ! -f "/app/nfl_complete_database.db" ]; then
     echo "First run - downloading NFL database"
@@ -17,4 +19,5 @@ if [ ! -f "/app/nfl_users.db" ]; then
 fi
 
 # Start server
+cd /app
 uvicorn main:app --host 0.0.0.0 --port 8000

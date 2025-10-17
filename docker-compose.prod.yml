@@ -9,13 +9,13 @@ services:
       - "8000:8000"
     volumes:
       # Mount databases as volumes
-      - ./nfl_complete_database.db:/app/nfl_complete_database.db
-      - ./nfl_users.db:/app/nfl_users.db
+      - nfl-data:/app/data
       - nfl-logs:/app/logs
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - ENVIRONMENT=production
+      - DATA_DIR=/app/data
     networks:
       - nfl-network
     deploy:
@@ -50,5 +50,7 @@ networks:
     driver: bridge
 
 volumes:
+  nfl-data:
+    driver: local
   nfl-logs:
     driver: local
