@@ -8,9 +8,9 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: linear-gradient(180deg, #FFFFFF 0%, #0F0616 100%);
+  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 100%);
   min-height: 100vh;
-  color: #2c3e50;
+  color: #e4e4e7;
 }
 
 .App {
@@ -62,7 +62,7 @@ body {
 
 
 .status-card {
-  background: white;
+  background: #1e293B;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -81,7 +81,7 @@ body {
 }
 
 .status-header h3 {
-  color: #2c3e50;
+  color: #f1f5f0;
   font-size: 1.1rem;
 }
 
@@ -96,7 +96,7 @@ body {
 }
 
 .refresh-btn:hover {
-  background-color: #f0f0f0;
+  background-color: #334155;
 }
 
 .status-indicator {
@@ -164,7 +164,7 @@ body {
 }
 
 .examples-section {
-  background: white;
+  background: #f1f5f9;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -183,8 +183,8 @@ body {
 }
 
 .example-btn {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
+  background: #334155;
+  border: 1px solid #475569;
   padding: 0.75rem;
   border-radius: 8px;
   text-align: left;
@@ -195,7 +195,7 @@ body {
 }
 
 .example-btn:hover:not(:disabled) {
-  background: #e9ecef;
+  background: #475569;
   border-color: #3498db;
   transform: translateY(-1px);
 }
@@ -206,7 +206,7 @@ body {
 }
 
 .main-content {
-  background: white;
+  background: #1e293b;
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -226,7 +226,7 @@ body {
 .query-input {
   flex: 1;
   padding: 1rem;
-  border: 2px solid #e9ecef;
+  border: 2px solid #475569;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -238,8 +238,8 @@ body {
 }
 
 .query-input:disabled {
-  background-color: #f8f9fa;
-  color: #6c757d;
+  background-color: #1e203b;
+  color: #94a3b8;
 }
 
 .query-btn {
@@ -318,7 +318,7 @@ body {
 }
 
 .results-header h3 {
-  color: #2c3e50;
+  color: #f1f5f9;
 }
 
 .results-actions {
@@ -359,11 +359,11 @@ body {
 .results-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: #0f172a;
 }
 
 .results-table th {
-  background: linear-gradient(135deg, #2c3e50, #34495e);
+  background: linear-gradient(135deg, #1e293b, #334155);
   color: white;
   padding: 1rem 0.75rem;
   text-align: left;
@@ -374,12 +374,12 @@ body {
 
 .results-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid #334155;
   font-size: 0.9rem;
 }
 
 .results-table tr:hover {
-  background-color: #f8f9fa;
+  background-color: #1e293b;
 }
 
 .results-table tr:last-child td {
@@ -402,8 +402,8 @@ body {
 }
 
 .sql-toggle {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: #334155;
+  border: 1px solid #475569;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
@@ -413,7 +413,7 @@ body {
 }
 
 .sql-toggle:hover {
-  background: #e9ecef;
+  background: #475569;
 }
 
 .sql-code {
