@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 RUN mkdir -p /app/data /app/logs
-
+RUN chmod +x start.sh
 EXPOSE 8000
 
 ENV PYTHONUNBUFFERED=1
