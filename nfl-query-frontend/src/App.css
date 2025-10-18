@@ -227,7 +227,7 @@ body {
   flex: 1;
   padding: 1rem;
   border: 2px solid #38444d;
-  background-color: #3B3B3B
+  background-color: #3B3B3B;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
