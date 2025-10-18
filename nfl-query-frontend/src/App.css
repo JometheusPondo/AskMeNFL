@@ -234,6 +234,10 @@ body {
   transition: border-color 0.2s ease;
 }
 
+::placeholder {
+  color: white;
+}
+
 .query-input:focus {
   outline: none;
   border-color: #3498db;
