@@ -8,7 +8,7 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 100%);
+  background: linear-gradient(180deg, #0f1419 0%, #1a1f3a 100%);
   min-height: 100vh;
   color: #e4e4e7;
 }
@@ -62,7 +62,7 @@ body {
 
 
 .status-card {
-  background: #1e293B;
+  background: #15202b;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -164,14 +164,14 @@ body {
 }
 
 .examples-section {
-  background: #f1f5f9;
+  background: #15202b;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 .examples-section h3 {
-  color: #2c3e50;
+  color: #e1e8ed;
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -183,20 +183,20 @@ body {
 }
 
 .example-btn {
-  background: #334155;
-  border: 1px solid #475569;
+  background: #15202b;
+  border: 1px solid #38444d;
   padding: 0.75rem;
   border-radius: 8px;
   text-align: left;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #2c3e50;
+  color: #8b98a5;
 }
 
 .example-btn:hover:not(:disabled) {
   background: #475569;
-  border-color: #3498db;
+  border-color: #8b98a5;
   transform: translateY(-1px);
 }
 
@@ -206,7 +206,7 @@ body {
 }
 
 .main-content {
-  background: #1e293b;
+  background: #15202b;
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -226,7 +226,7 @@ body {
 .query-input {
   flex: 1;
   padding: 1rem;
-  border: 2px solid #475569;
+  border: 2px solid #38444d;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -238,13 +238,13 @@ body {
 }
 
 .query-input:disabled {
-  background-color: #1e203b;
-  color: #94a3b8;
+  background-color: #0f1419;
+  color: #15202b;
 }
 
 .query-btn {
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, #15202b, #38444d);
   color: white;
   border: none;
   border-radius: 8px;
