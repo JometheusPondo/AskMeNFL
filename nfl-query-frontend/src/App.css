@@ -62,7 +62,7 @@ body {
 
 
 .status-card {
-  background: #15202b;
+  background: #0f1419;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -164,7 +164,7 @@ body {
 }
 
 .examples-section {
-  background: #15202b;
+  background: #0f1419;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -183,7 +183,7 @@ body {
 }
 
 .example-btn {
-  background: #15202b;
+  background: #0f1419;
   border: 1px solid #38444d;
   padding: 0.75rem;
   border-radius: 8px;
@@ -195,7 +195,7 @@ body {
 }
 
 .example-btn:hover:not(:disabled) {
-  background: #475569;
+  background: #0f1419;
   border-color: #8b98a5;
   transform: translateY(-1px);
 }
@@ -206,7 +206,7 @@ body {
 }
 
 .main-content {
-  background: #15202b;
+  background: #0f1419;
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -359,11 +359,11 @@ body {
 .results-table {
   width: 100%;
   border-collapse: collapse;
-  background: #0f172a;
+  background: #0f1419;
 }
 
 .results-table th {
-  background: linear-gradient(135deg, #1e293b, #334155);
+  background: linear-gradient(135deg, #0f1419, #15202b);
   color: white;
   padding: 1rem 0.75rem;
   text-align: left;
@@ -374,7 +374,7 @@ body {
 
 .results-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid #15202b;
   font-size: 0.9rem;
 }
 
