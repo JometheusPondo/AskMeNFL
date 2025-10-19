@@ -183,7 +183,7 @@ body {
 }
 
 .example-btn {
-  background: #0f1419;
+  background: #38444d;
   border: 1px solid #38444d;
   padding: 0.75rem;
   border-radius: 8px;
@@ -191,7 +191,7 @@ body {
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #8b98a5;
+  color: #e1e8ed;
 }
 
 .example-btn:hover:not(:disabled) {
@@ -240,8 +240,8 @@ body {
 
 .query-input:focus {
   outline: none;
-  text-color: white;
   border-color: #3498db;
+  color: #ff0000;
 }
 
 .query-input:disabled {
