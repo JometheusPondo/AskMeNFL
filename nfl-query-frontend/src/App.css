@@ -241,7 +241,7 @@ body {
 .query-input:focus {
   outline: none;
   border-color: #3498db;
-  color: #ff0000;
+  color: white;
 }
 
 .query-input:disabled {
