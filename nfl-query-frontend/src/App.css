@@ -246,7 +246,7 @@ body {
 
 .query-input:disabled {
   background-color: #0f1419;
-  color: #15202b;
+  color: white;
 }
 
 .query-btn {
@@ -370,7 +370,7 @@ body {
 }
 
 .results-table th {
-  background: linear-gradient(135deg, #0f1419, #15202b);
+  background: #15202b;
   color: white;
   padding: 1rem 0.75rem;
   text-align: left;

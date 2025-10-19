@@ -455,7 +455,7 @@ const App = () => {
       </main>
 
       <footer className="app-footer">
-        <p>Powered by FastAPI + React </p>
+        <p>Powered by FastAPI + React + Gemini </p>
       </footer>
 
       { showLogin && (
