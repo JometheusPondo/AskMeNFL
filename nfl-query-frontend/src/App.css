@@ -240,6 +240,7 @@ body {
 
 .query-input:focus {
   outline: none;
+  text-color: white;
   border-color: #3498db;
 }
 

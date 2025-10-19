@@ -27,7 +27,7 @@ const DatabaseStatus = ({ status, onRefresh }) => {
             <span>Connected</span>
           </div>
           <div className="metric">
-            <strong>{status.total_plays?.toLocaleString()}</strong> total plays
+            <strong>{status.totalPlays?.toLocaleString()}</strong> total plays
           </div>
         </div>
       ) : (
