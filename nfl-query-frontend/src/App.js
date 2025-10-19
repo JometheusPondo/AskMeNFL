@@ -368,7 +368,7 @@ const App = () => {
       <header className="app-header">
         <div className="hero-section">
           <h1>🏈 Ask Me NFL</h1>
-          <p>Ask questions about NFL statistics in plain English!</p>
+          <p>Ask questions about NFL statistics in plain English! (From the year 2000 onward)</p>
 
           <div className="auth-section">
             { isAuthenticated ? (
