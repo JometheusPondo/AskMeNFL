@@ -93,6 +93,7 @@ const SavedQueries = ({ token, onLoadQuery, currentQuery, onQuerySaved }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          queryText: query.queryContent,
           queryName: newName
         })
       });

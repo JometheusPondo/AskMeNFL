@@ -1,9 +1,12 @@
 import os
+from dotenv import load_dotenv
 from typing import Any
 
 import google.generativeai as genAI
 
 from llm.provider import LLMProvider
+
+load_dotenv()
 
 class GeminiProvider(LLMProvider):
     def __init__(self, modelName: str = 'gemini-2.5-pro'):
