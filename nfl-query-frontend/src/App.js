@@ -444,7 +444,7 @@ const App = () => {
                 />
                 
                 <SqlDisplay 
-                  query={results.sql_query}
+                  query={results.sqlQuery}
                   isVisible={showSql}
                   onToggle={() => setShowSql(!showSql)}
                 />
@@ -455,7 +455,7 @@ const App = () => {
       </main>
 
       <footer className="app-footer">
-        <p>Powered by FastAPI + React + Gemini </p>
+        <p>Powered by FastAPI + React + Gemini</p>
       </footer>
 
       { showLogin && (
