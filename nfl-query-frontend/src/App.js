@@ -440,7 +440,7 @@ const App = () => {
                   data={results.data}
                   columns={results.columns}
                   timing={results.timing}
-                  rowsReturned={results.rows_returned}
+                  rowsReturned={results.rowsReturned}
                 />
                 
                 <SqlDisplay 
