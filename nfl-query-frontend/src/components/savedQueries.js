@@ -85,6 +85,10 @@ const SavedQueries = ({ token, onLoadQuery, currentQuery, onQuerySaved }) => {
   };
 
   const updateQuery = async (queryId, newName) => {
+
+    const query = savedQueries.find(q => q.id === queryId);
+    if (!query) return;
+
     try {
       const response = await fetch(`${API_BASE_URL}/queries/${queryId}`, {
         method: 'PUT',
