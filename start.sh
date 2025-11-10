@@ -3,7 +3,7 @@
 mkdir -p /app/data
 
 # Check if database exists
-if [ ! -f "/app/nfl_complete_database.db" ]; then
+if [ ! -f "/app/data/nfl_complete_database.db" ]; then
     echo "First run - downloading NFL database"
     cd /app/data
     python /app/nfl-db-downloader.py /app/data/nfl_complete_database.db <<EOF
