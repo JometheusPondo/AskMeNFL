@@ -48,13 +48,24 @@ class NFLDataDownloader:
         logger.info(f"🏈 Starting core data download for {len(years)} years...")
 
         logger.info("Downloading play-by-play data...")
-        start_time = time.time()
-        try:
-            pbp_data = nfl.import_pbp_data(years, downcast=True)
-            pbp_data.to_sql('plays', self.conn, if_exists='replace', index=False)
-            self.log_progress('play_by_play', years, start_time)
-        except Exception as e:
-            logger.error(f"Play-by-play download failed: {e}")
+        batch_size = 5
+        for i in range(0, len(years), batch_size):
+            batch = years[i:i + batch_size]
+            start_time = time.time()
+            try:
+                pbp_data = nfl.import_pbp_data(years, downcast=True)
+
+                if_exists = 'replace' if i == 0 else 'append'
+                pbp_data.to_sql('plays', self.conn, if_exists=if_exists, index=False)
+
+                elapsed = time.time() - start_time
+                logger.info(f"Batch completed in {elapsed:.1f}s")
+
+                del pbp_data
+                import gc
+                gc.collect()
+            except Exception as e:
+                logger.error(f"Play-by-play download failed: {e}")
 
         logger.info("Downloading weekly player stats...")
         start_time = time.time()
