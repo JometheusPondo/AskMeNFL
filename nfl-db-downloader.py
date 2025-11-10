@@ -4,7 +4,7 @@ NFL Complete Data Downloader
 Downloads ALL available NFL data from nfl_data_py and organizes it into SQLite database
 """
 
-import nfl_data_py as nfl
+import nflreadpy as nfl
 import sqlite3
 import pandas as pd
 import time
@@ -292,7 +292,7 @@ if __name__ == "__main__":
     db_path = sys.argv[1] if len(sys.argv) > 1 else "nfl_complete_database.db"
 
     print("🏈 NFL Complete Data Downloader")
-    print("This will download ALL available NFL data from nfl_data_py")
+    print("This will download ALL available NFL data from nflreadpy")
     print("Estimated download time: 30-60 minutes")
     print("Estimated storage: 5-8 GB")
 
